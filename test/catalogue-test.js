@@ -95,4 +95,21 @@ describe("Catalogue", () => {
       expect(rejectedProduct).to.be.undefined;
     });
   });
+
+  describe("search", () => {
+    it("return the products whose price is less than (or equal to) the specified value", () => {
+      const result = cat.search({ price: 25.0 });
+      expect(result).to.have.members(["Product 1", "Product 3"]);
+    });
+    it("return the products with the keyword in their name", () => {
+      cat.addProduct(new Product("C124", "shoes", 10, 30, 10.0));
+      cat.addProduct(new Product("C125", "shoulder bag", 10, 100, 10.0));
+
+      const result = cat.search({ keyword: "sho" });
+      expect(result).to.have.members(["shoes", "shoulder bag"]);
+    });
+    it("exception should be thrown with the message 'Bad search' if the criteria object has neither key", () => {
+      expect(() => cat.search({ aaa: 1 }).to.throw("Bad search"));
+    });
+  });
 });

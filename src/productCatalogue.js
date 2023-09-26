@@ -48,5 +48,28 @@ class Catalogue {
       .reduce((acc, p) => acc + 1, 0);
     return noProductsAdded;
   }
+
+  search(criteria) {
+    if (!criteria || (!criteria.price && !criteria.keyword)) {
+      throw new Error("Bad search");
+    }
+
+    if (criteria.price) {
+      return this.products
+        .filter((product) => product.price <= criteria.price)
+        .map((product) => product.name);
+    } else if (criteria.keyword) {
+      const keyword = criteria.keyword.toLowerCase();
+      return this.products
+        .filter((product) => {
+          if (product.name.toLowerCase().search(keyword) !== -1) {
+            return true;
+          } else {
+            return false;
+          }
+        })
+        .map((product) => product.name);
+    }
+  }
 }
 module.exports = Catalogue;
